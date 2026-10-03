@@ -58,6 +58,22 @@ flowchart TD
     Pool --> BD
     Reportes --> Replica
 ```
+## Diagrama de arquitectura (Archify)
+
+<p align="center">
+  <a href="pasteleria-saas-blanco.svg">
+    <img src="pasteleria-saas-blanco.svg" alt="Arquitectura SaaS de gestión de pastelerías: actores, balanceador multi-tenant, aplicación web, seis módulos de negocio, Redis, PgBouncer y PostgreSQL principal y réplica." width="100%">
+  </a>
+</p>
+
+<p align="center">
+  <a href="pasteleria-saas-blanco.svg">Ver imagen completa</a> ·
+  <a href="pasteleria-saas.html">Diagrama interactivo</a>
+</p>
+
+Los seis módulos acceden a Redis (conexiones verdes) y a PgBouncer (conexiones grises). PgBouncer se conecta al PostgreSQL principal; Reportes dispone además de una conexión directa a la réplica de lectura. Los cruces de líneas no representan conexiones entre ellas.
+
+La imagen mantiene el fondo blanco. Para cambiar de tema, ampliar o exportar, descarga el HTML y ábrelo en el navegador. El contenido está en español; los controles del visor y su idioma HTML usan inglés por defecto.
 
 ---
 
