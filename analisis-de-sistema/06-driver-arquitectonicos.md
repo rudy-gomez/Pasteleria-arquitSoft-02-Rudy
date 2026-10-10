@@ -15,3 +15,4 @@ en las decisiones de arquitectura.
 | **DA04** | El sistema debe garantizar aislamiento lógico de datos entre cuentas distintas. | AC06 – Seguridad multi-tenant | Condiciona el modelo de datos (tenant_id en tablas principales) y la capa de autorización. |
 | **DA05** | La base de datos no debe agotar conexiones bajo picos de escritura simultánea. | RC06 – Pool de conexiones | Justifica la incorporación de PgBouncer entre la aplicación y PostgreSQL. |
 | **DA06** | Los reportes no deben afectar el rendimiento de las operaciones transaccionales. | RC04 – Réplica de lectura | Justifica separar la carga de reportes en una réplica de lectura independiente. |
+| **DA07** | El sistema debe permitir modificar funcionalidades sin afectar innecesariamente otros módulos. | AC09 – Mantenibilidad | Influye en la separación de responsabilidades, modularidad y control de dependencias internas. |
