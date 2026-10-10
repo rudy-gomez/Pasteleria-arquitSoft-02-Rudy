@@ -20,3 +20,4 @@ debe sostener el crecimiento de la cadena en número de sucursales.
 | **AC06** | Seguridad multi-tenant | El sistema debe garantizar el aislamiento lógico de los datos entre cuentas distintas. |
 | **AC07** | Seguridad de acceso | El acceso debe estar protegido mediante autenticación cifrada y permisos diferenciados por rol. |
 | **AC08** | Usabilidad | La interfaz del panel interno debe ser utilizable desde tablet o celular en el punto de venta. |
+| **AC09** | Mantenibilidad | El sistema debe estar organizado en módulos de forma que permita agregar o modificar funcionalidades (ej. un nuevo método de pago o tipo de reporte) sin afectar innecesariamente otros módulos. |
