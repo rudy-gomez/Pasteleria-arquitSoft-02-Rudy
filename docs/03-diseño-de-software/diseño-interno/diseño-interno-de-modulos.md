@@ -8,39 +8,11 @@
 - Confirmar una venta junto con su stock y cobro.
 - Coordinar Catálogo, Inventario y Caja mediante contratos.
 
-## 2. Estructura prevista del proyecto
+## 2. Estructura de carpetas
 
-```text
-tecnologia/pasteleria-saas/
-├── apps/
-│   ├── web/                         Next.js + TypeScript + Tailwind CSS
-│   │   ├── src/app/                 Rutas: acceso, plataforma, administración, caja
-│   │   ├── src/features/            Catálogo, inventario, ventas, caja y reportes
-│   │   ├── src/components/          Formularios, tablas y componentes compartidos
-│   │   ├── src/lib/api/             Cliente HTTP, sesión y errores
-│   │   └── next.config.ts           Exportación estática; sin backend de negocio
-│   └── api/
-│       ├── src/app.ts               Middleware y rutas Express
-│       ├── src/server.ts            Arranque, salud y cierre de conexiones
-│       ├── src/composition.ts       Ensambla módulos y transacciones
-│       ├── src/shared/              Contexto autorizado, errores y transacciones
-│       └── src/modules/
-│           ├── plataforma/         Negocios, límites y sucursales
-│           ├── acceso/             Usuarios, permisos, turnos y sesiones
-│           ├── catalogo/           Productos, precios y fotografías
-│           ├── inventario/         Lotes, vencimientos, movimientos y traslados
-│           ├── ventas/             Confirmación y anulación
-│           ├── caja/               Sesiones, cobros, cierres y entregas
-│           └── reportes/           Consultas, historial y exportación XLSX
-├── database/                       Esquema Prisma, migraciones SQL/RLS y semillas
-├── tests/                          Integración, aislamiento, navegador y carga
-└── compose.yaml                    PostgreSQL local para desarrollo
-```
+**Un solo proyecto:** `tecnologia/pasteleria-saas/` contiene `apps/web/` (interfaz), `apps/api/` (backend) y `database/` (Prisma y migraciones).
 
-- Contratos públicos por módulo en `index.ts`.
-- Reportes lee proyecciones; no modifica datos operativos.
-
-### Módulo Ventas
+**Detalle del módulo Ventas dentro de ese backend:**
 
 ```text
 apps/api/src/modules/ventas/
@@ -102,15 +74,11 @@ apps/api/src/shared/transacciones/
 | 5 | Guardar venta, cobros, movimientos e historial. |
 | 6 | Confirmar todo o revertir; responder después del commit. |
 
-## 6. Código de referencia
+## 6. Código de referencia en TypeScript
 
-- **Caso desarrollado:** confirmar una venta; integra Catálogo, Inventario y Caja.
-- **Alcance del ejemplo:** clases y contratos de referencia, no el código completo del SaaS.
-- **Lectura:** abre cada archivo para consultar su código con sangría.
-- **Importes:** céntimos; se omiten imports y DTO completos.
+Ejemplo de confirmación de venta. Imports y adaptadores auxiliares omitidos; API transaccional de Prisma Client 7.
 
-<details>
-<summary>Dominio · detalle-venta.ts</summary>
+### Dominio · detalle-venta.ts
 
 ```ts
 type DetalleVenta = Readonly<{
@@ -120,11 +88,7 @@ type DetalleVenta = Readonly<{
 }>;
 ```
 
-</details>
-
-
-<details>
-<summary>Dominio · venta.ts</summary>
+### Dominio · venta.ts
 
 ```ts
 class Venta {
@@ -170,11 +134,7 @@ class Venta {
 }
 ```
 
-</details>
-
-
-<details>
-<summary>Aplicación · confirmar-venta.command.ts</summary>
+### Aplicación · confirmar-venta.command.ts
 
 ```ts
 type Item = Readonly<{
@@ -200,36 +160,46 @@ type Resultado = Readonly<{
 }>;
 ```
 
-</details>
-
-
-<details>
-<summary>Aplicación · puertos de colaboración</summary>
-
-Cada interfaz se define en su archivo y se expone mediante el contrato público de su módulo.
+### Aplicación · catalogo-consulta.ts
 
 ```ts
 // catalogo-consulta.ts
 interface CatalogoConsulta {
   cotizar(items: readonly Item[]): Promise<readonly DetalleVenta[]>;
 }
+```
 
+### Aplicación · inventario-salida.ts
+
+```ts
 // inventario-salida.ts
 interface InventarioSalida {
   descontarLotesAptos(items: readonly Item[]): Promise<void>;
 }
+```
 
+### Aplicación · caja-cobros.ts
+
+```ts
 // caja-cobros.ts
 interface CajaCobros {
   bloquearYValidar(sesionId: string): Promise<void>;
   registrar(ventaId: string, cobros: readonly Cobro[]): Promise<void>;
 }
+```
 
+### Aplicación · venta-repository.ts
+
+```ts
 // venta-repository.ts
 interface VentaRepository {
   guardar(venta: Venta): Promise<string>;
 }
+```
 
+### Aplicación · idempotencia.ts
+
+```ts
 // idempotencia.ts
 interface Idempotencia {
   reclamar(cmd: Comando): Promise<Resultado | null>;
@@ -237,11 +207,7 @@ interface Idempotencia {
 }
 ```
 
-</details>
-
-
-<details>
-<summary>Aplicación compartida · contexto-transaccional.ts</summary>
+### Aplicación compartida · contexto-transaccional.ts
 
 ```ts
 type ContextoAutorizado = Readonly<{
@@ -259,11 +225,7 @@ interface ContextoTransaccional {
 }
 ```
 
-</details>
-
-
-<details>
-<summary>Aplicación compartida · unidad-de-trabajo.ts</summary>
+### Aplicación compartida · unidad-de-trabajo.ts
 
 ```ts
 interface UnidadDeTrabajo {
@@ -274,11 +236,7 @@ interface UnidadDeTrabajo {
 }
 ```
 
-</details>
-
-
-<details>
-<summary>Aplicación · confirmar-venta.ts</summary>
+### Aplicación · confirmar-venta.ts
 
 ```ts
 class ConfirmarVenta {
@@ -334,22 +292,73 @@ class ConfirmarVenta {
 }
 ```
 
-</details>
+### Infraestructura · unidad-de-trabajo-prisma.ts
 
+```ts
+// shared/transacciones/unidad-de-trabajo-prisma.ts
+type CrearContexto = (
+  tx: Prisma.TransactionClient,
+  ctx: ContextoAutorizado
+) => ContextoTransaccional;
 
-### Infraestructura · contratos de implementación
+class UnidadDeTrabajoPrisma implements UnidadDeTrabajo {
+  constructor(
+    private readonly prisma: PrismaClient,
+    private readonly crearContexto: CrearContexto
+  ) {}
 
-| Archivo | Responsabilidad |
-|---|---|
-| `unidad-de-trabajo-prisma.ts` | Abrir `prisma.$transaction`, establecer tenant con SQL parametrizado y entregar el mismo `tx` a los adaptadores. |
-| `venta-repository-prisma.ts` | Guardar cabecera y detalles con precios históricos, dentro de ese `tx`. |
-| Adaptadores de Catálogo, Inventario y Caja | Cotizar con precios del servidor; descontar lotes aptos; guardar cobros y movimientos. |
-| Adaptador de Idempotencia | Clave única por negocio, usuario y operación; comparar la huella del comando completo. |
+  ejecutar<T>(
+    ctx: ContextoAutorizado,
+    operacion: (puertos: ContextoTransaccional) => Promise<T>
+  ): Promise<T> {
+    return this.prisma.$transaction(async (tx) => {
+      // Contexto de sesión verificado; valor parametrizado y local al tx.
+      await tx.$queryRaw`
+        SELECT set_config('app.tenant_id', ${ctx.tenantId}, true)
+      `;
 
-<details>
-<summary>Presentación · ventas.controller.ts</summary>
+      const puertos = this.crearContexto(tx, ctx);
+      return operacion(puertos);
+      // Prisma confirma al terminar; una excepción revierte la operación.
+    });
+  }
+}
+```
 
-Fragmento posterior a autenticación, autorización y validación de entrada.
+### Infraestructura · venta-repository-prisma.ts
+
+```ts
+// Ejemplo de mapeo; los nombres de campos corresponden al esquema previsto.
+class VentaRepositoryPrisma implements VentaRepository {
+  constructor(
+    private readonly tx: Prisma.TransactionClient,
+    private readonly ctx: ContextoAutorizado
+  ) {}
+
+  async guardar(venta: Venta): Promise<string> {
+    const registro = await this.tx.venta.create({
+      data: {
+        tenantId: this.ctx.tenantId,
+        sucursalId: this.ctx.sucursalId,
+        usuarioId: this.ctx.usuarioId,
+        totalCentimos: venta.totalCentimos(),
+        detalles: {
+          create: venta.detalles.map((detalle) => ({
+            tenantId: this.ctx.tenantId,
+            productoId: detalle.productoId,
+            cantidad: detalle.cantidad,
+            precioCentimos: detalle.precioCentimos
+          }))
+        }
+      }
+    });
+
+    return registro.id;
+  }
+}
+```
+
+### Presentación · ventas.controller.ts
 
 ```ts
 class VentasController {
@@ -367,11 +376,7 @@ class VentasController {
 }
 ```
 
-</details>
-
-
-<details>
-<summary>Composición · ventas.module.ts</summary>
+### Composición · ventas.module.ts
 
 ```ts
 function crearModuloVentas(uow: UnidadDeTrabajo) {
@@ -382,20 +387,47 @@ function crearModuloVentas(uow: UnidadDeTrabajo) {
 }
 ```
 
-</details>
+### Composición · composition.ts
 
+```ts
+// Los adaptadores auxiliares pertenecen a sus módulos respectivos.
+function crearContexto(
+  tx: Prisma.TransactionClient,
+  ctx: ContextoAutorizado
+): ContextoTransaccional {
+  return {
+    catalogo: new CatalogoConsultaPrisma(tx, ctx),
+    inventario: new InventarioSalidaPrisma(tx, ctx),
+    caja: new CajaCobrosPrisma(tx, ctx),
+    ventas: new VentaRepositoryPrisma(tx, ctx),
+    idempotencia: new IdempotenciaPrisma(tx, ctx)
+  };
+}
 
-| Punto de entrada | Responsabilidad |
-|---|---|
-| `ventas.routes.ts` | Enlazar `POST /api/v1/ventas` con autenticación, permisos, validación y controlador. |
-| `composition.ts` | Construir `UnidadDeTrabajoPrisma` y entregarla a `crearModuloVentas`. |
-| Middleware de errores | Traducir conflictos a 409; sesión ausente a 401 y permisos insuficientes a 403. |
+function componerVentas(prisma: PrismaClient) {
+  const uow = new UnidadDeTrabajoPrisma(prisma, crearContexto);
+  return crearModuloVentas(uow);
+}
+```
 
-## 7. Condiciones que se verifican
+### Presentación · ventas.routes.ts
 
-- Contexto autorizado obtenido de la sesión; nunca del cuerpo de la petición.
-- Un responsable de registro por sucursal; ventas simultáneas entre sucursales o negocios.
-- Sin stock negativo, lotes vencidos, cobros duplicados ni commits parciales.
-- Auditoría y movimientos forman parte de la misma transacción.
-- Efectivo recibido y vuelto: detalle funcional definido en RF10.
-- Pruebas con PostgreSQL: aislamiento, reintentos, rollback y cierre frente a venta.
+```ts
+// Middlewares definidos por Acceso y la validación de entrada.
+function crearRutasVentas(controller: VentasController) {
+  const router = Router();
+
+  router.post(
+    '/',
+    autenticarSesion,
+    autorizarVentaEnSucursal,
+    validarComandoVenta,
+    (req, res, next) => {
+      controller.confirmar(req, res).catch(next);
+    }
+  );
+
+  return router;
+}
+// app.use('/api/v1/ventas', crearRutasVentas(modulo.controller));
+```

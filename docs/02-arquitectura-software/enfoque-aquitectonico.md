@@ -1,14 +1,18 @@
-Se utiliza el enfoque **Clean Architecture** para separar las reglas del negocio de la tecnología.
+# Enfoque arquitectónico
 
-| Elemento | Descripción aplicada a la plataforma de pastelerías |
-|---|---|
-| Patrón / enfoque arquitectónico | Clean Architecture (Arquitectura Limpia). |
-| Objetivo | Separar responsabilidades y dirigir las dependencias hacia el núcleo del negocio. |
-| ¿Qué problema resuelve? | Evita que las reglas de ventas, inventario y caja dependan de Next.js, Express, Prisma o el almacenamiento de imágenes. |
-| Capas definidas | Presentación, Aplicación, Dominio e Infraestructura. |
-| Beneficios | Facilita pruebas de reglas, delimita cambios y permite sustituir adaptadores sin modificar innecesariamente el dominio. |
+**Clean Architecture dentro del backend del monolito modular.**
 
-![Dependencias de Clean Architecture](../../img/clean-architecture.png)
-- El dominio ocupa el centro; Aplicación coordina sus reglas.
-- Los recuadros anidados representan niveles de dependencia, no carpetas contenidas físicamente.
-- Infraestructura implementa los puertos de Aplicación; composición conecta las implementaciones.
+![Clean Architecture aplicada a Ventas](../../img/clean-architecture.png)
+
+| Parte | Elementos del proyecto | Responsabilidad |
+|---|---|---|
+| Presentación | Rutas, validación y `VentasController` | Traducir HTTP a una operación autorizada. |
+| Aplicación | `ConfirmarVenta`, contratos y `UnidadDeTrabajo` | Coordinar venta, stock y cobros. |
+| Dominio | `Venta`, `DetalleVenta` | Validar cantidades, precios y total. |
+| Infraestructura | Adaptadores de módulos y Prisma ORM | Implementar contratos y persistir en PostgreSQL. |
+| Composición | `composition.ts`, `ventas.module.ts` | Crear adaptadores e inyectarlos en los casos de uso. |
+
+- El dominio no importa Express, Prisma ni proveedores.
+- Los puertos están en Aplicación porque expresan necesidades de los casos de uso.
+- La anidación representa niveles de dependencia; las carpetas son hermanas.
+- El mismo esquema se aplica a los demás módulos; Ventas muestra una colaboración completa.
