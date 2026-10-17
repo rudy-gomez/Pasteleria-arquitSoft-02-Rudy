@@ -2,7 +2,7 @@
 
 ## Diagrama de arquitectura
 
-![Arquitectura inicial por capas](../../img/arquitectura-inicial.svg)
+![Arquitectura inicial por capas](../../img/arquitectura-inicial.png)
 
 ## Descripción
 

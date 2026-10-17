@@ -35,7 +35,7 @@ Sistema web para administrar una pastelería o una cadena de sucursales, con inf
 | Fotografías | Cloudflare R2. |
 | Despliegue previsto | Render Web Service y Render Postgres. |
 
-![Arquitectura del sistema](img/arquitectura-inicial.svg)
+![Arquitectura del sistema](img/arquitectura-inicial.png)
 
 ## Módulos
 

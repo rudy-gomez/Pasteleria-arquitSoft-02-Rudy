@@ -1,6 +1,6 @@
 # Componentes arquitectónicos
 
-![Componentes de la API de pastelerías](../../img/nivel3-componentes.svg)
+![Componentes de la API de pastelerías](../../img/nivel3-componentes.png)
 
 | Capa interna | Responsabilidad |
 |---|---|

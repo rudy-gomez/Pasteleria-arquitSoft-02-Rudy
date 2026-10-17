@@ -9,7 +9,7 @@ Ampliar Ventas de [C4 nivel 3](Nivel3-Diagrama-de-Componentes.md): confirmación
 
 ## 2. Diagrama de clases
 
-![Clases y contratos de confirmación de venta](../../img/nivel4-clases.svg)
+![Clases y contratos de confirmación de venta](../../img/nivel4-clases.png)
 
 | Elemento | Tipo y ubicación | Responsabilidad |
 |---|---|---|
@@ -36,7 +36,7 @@ Los puertos de Caja, Inventario y Catálogo se muestran como colaboradores del c
 
 ## 4. Secuencia de confirmación
 
-![Secuencia de venta y rollback](../../img/secuencia-venta.svg)
+![Secuencia de venta y rollback](../../img/secuencia-venta.png)
 
 La secuencia es una vista dinámica complementaria; no reemplaza el diagrama de clases del nivel 4. Presenta el flujo exitoso y la alternativa de error antes del commit.
 

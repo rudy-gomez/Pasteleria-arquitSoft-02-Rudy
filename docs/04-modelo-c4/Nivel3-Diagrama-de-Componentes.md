@@ -17,7 +17,7 @@ Mostrar los módulos de la API y su colaboración dentro del monolito.
 
 ## 2. Diagrama
 
-![nivel3 componentes](../../img/nivel3-componentes.svg)
+![nivel3 componentes](../../img/nivel3-componentes.png)
 
 Las flechas muestran colaboración en ejecución. Los adaptadores implementan puertos del núcleo; el diagrama no representa la dirección de imports del código.
 

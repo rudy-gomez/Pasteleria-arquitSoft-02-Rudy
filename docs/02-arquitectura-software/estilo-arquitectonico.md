@@ -2,7 +2,7 @@
 
 Se utiliza **monolito modular por capas**, con una API REST Node.js + Express y una base PostgreSQL compartida con aislamiento por negocio.
 
-![Monolito modular por capas](../../img/monolito-modular.svg)
+![Monolito modular por capas](../../img/monolito-modular.png)
 
 | Elemento | Aplicación al sistema |
 |---|---|

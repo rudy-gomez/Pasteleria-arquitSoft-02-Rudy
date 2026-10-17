@@ -8,7 +8,7 @@ Se utiliza el enfoque **Clean Architecture** para separar las reglas del negocio
 | Capas definidas | Presentación, Aplicación, Dominio e Infraestructura. |
 | Beneficios | Facilita pruebas de reglas, delimita cambios y permite sustituir adaptadores sin modificar innecesariamente el dominio. |
 
-![Dependencias de Clean Architecture](../../img/clean-architecture.svg)
+![Dependencias de Clean Architecture](../../img/clean-architecture.png)
 - El dominio ocupa el centro; Aplicación coordina sus reglas.
 - Los recuadros anidados representan niveles de dependencia, no carpetas contenidas físicamente.
 - Infraestructura implementa los puertos de Aplicación; composición conecta las implementaciones.

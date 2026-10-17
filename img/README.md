@@ -1,6 +1,6 @@
 # Diagramas
 
-- Formato único: **SVG**, utilizado directamente en la documentación.
-- Permite ampliar el diagrama sin perder nitidez.
-- C4: contexto, contenedores, componentes y clases de Ventas.
-- Diseño: arquitectura inicial, estilo modular, Clean Architecture, paquetes, SOLID y secuencia.
+- **Formato único:** PNG de alta resolución, integrado en los documentos Markdown.
+- **Visualización:** abrir la imagen para consultar los detalles a tamaño completo.
+- **C4:** contexto, contenedores, componentes y clases de Ventas.
+- **Diseño:** arquitectura inicial, estilo modular, Clean Architecture, paquetes, SOLID y secuencia.

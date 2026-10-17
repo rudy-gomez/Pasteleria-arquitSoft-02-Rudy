@@ -16,7 +16,7 @@ Mostrar quién utiliza la plataforma y con qué sistema externo se comunica.
 
 ## 2. Diagrama
 
-![nivel1 contexto](../../img/nivel1-contexto.svg)
+![nivel1 contexto](../../img/nivel1-contexto.png)
 
 ## 3. Personas (usuarios)
 

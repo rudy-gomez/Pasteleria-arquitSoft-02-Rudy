@@ -17,7 +17,7 @@ Mostrar las aplicaciones y almacenes de datos de la plataforma.
 
 ## 2. Diagrama
 
-![nivel2 contenedores](../../img/nivel2-contenedores.svg)
+![nivel2 contenedores](../../img/nivel2-contenedores.png)
 
 ## 3. Contenedores
 

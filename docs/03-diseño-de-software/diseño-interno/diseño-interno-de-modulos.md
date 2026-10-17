@@ -69,7 +69,7 @@ apps/api/src/shared/transacciones/
 
 ## 3. Capas y dependencias
 
-![Paquetes y dependencias del módulo Ventas](../../../img/paquetes-ventas.svg)
+![Paquetes y dependencias del módulo Ventas](../../../img/paquetes-ventas.png)
 
 | Capa | Archivos representativos | Responsabilidad | Dependencias permitidas |
 |---|---|---|---|
@@ -84,30 +84,33 @@ apps/api/src/shared/transacciones/
 
 ## 4. Clases y contratos
 
-![Clases del módulo Ventas](../../../img/nivel4-clases.svg)
+![Clases del módulo Ventas](../../../img/nivel4-clases.png)
 
 - `ContextoTransaccional` reúne cinco puertos separados.
 - Todos los adaptadores comparten la misma transacción.
 
 ## 5. Flujo de confirmación
 
-![Secuencia para confirmar una venta](../../../img/secuencia-venta.svg)
+![Secuencia para confirmar una venta](../../../img/secuencia-venta.png)
 
-1. Express autentica, autoriza negocio/sucursal y valida la estructura del comando.
-2. El caso de uso inicia la unidad de trabajo y reclama una clave idempotente ligada al negocio, usuario y contenido.
-3. Caja bloquea su sesión y comprueba que esté abierta y pertenezca al empleado; Catálogo entrega precios del servidor.
-4. Ventas construye la entidad; Inventario selecciona lotes aptos, bloquea en orden estable y descuenta solo si hay saldo suficiente.
-5. Los adaptadores guardan venta, cobros, movimientos y resultado idempotente. PostgreSQL confirma todo o revierte todo.
-6. Se devuelve el resultado después del commit. Un reintento idéntico recupera el resultado anterior.
-
-- Cierre de caja y venta validan la misma sesión.
-- R2 y Excel se ejecutan fuera de la transacción de venta.
+| Paso | Operación |
+|---|---|
+| 1 | Validar sesión, permisos y comando. |
+| 2 | Abrir transacción y comprobar la clave de reintento. |
+| 3 | Validar caja y obtener precios del servidor. |
+| 4 | Validar venta y descontar lotes aptos. |
+| 5 | Guardar venta, cobros, movimientos e historial. |
+| 6 | Confirmar todo o revertir; responder después del commit. |
 
 ## 6. Código de referencia
 
-Fragmentos del diseño de Ventas. Se omiten imports y DTO completos; los importes se expresan en céntimos.
+- **Caso desarrollado:** confirmar una venta; integra Catálogo, Inventario y Caja.
+- **Alcance del ejemplo:** clases y contratos de referencia, no el código completo del SaaS.
+- **Lectura:** abre cada archivo para consultar su código con sangría.
+- **Importes:** céntimos; se omiten imports y DTO completos.
 
-### Dominio · `detalle-venta.ts`
+<details>
+<summary>Dominio · detalle-venta.ts</summary>
 
 ```ts
 type DetalleVenta = Readonly<{
@@ -117,7 +120,11 @@ type DetalleVenta = Readonly<{
 }>;
 ```
 
-### Dominio · `venta.ts`
+</details>
+
+
+<details>
+<summary>Dominio · venta.ts</summary>
 
 ```ts
 class Venta {
@@ -163,7 +170,11 @@ class Venta {
 }
 ```
 
-### Aplicación · `confirmar-venta.command.ts`
+</details>
+
+
+<details>
+<summary>Aplicación · confirmar-venta.command.ts</summary>
 
 ```ts
 type Item = Readonly<{
@@ -189,7 +200,11 @@ type Resultado = Readonly<{
 }>;
 ```
 
-### Aplicación · puertos de colaboración
+</details>
+
+
+<details>
+<summary>Aplicación · puertos de colaboración</summary>
 
 Cada interfaz se define en su archivo y se expone mediante el contrato público de su módulo.
 
@@ -222,7 +237,11 @@ interface Idempotencia {
 }
 ```
 
-### Aplicación compartida · `contexto-transaccional.ts`
+</details>
+
+
+<details>
+<summary>Aplicación compartida · contexto-transaccional.ts</summary>
 
 ```ts
 type ContextoAutorizado = Readonly<{
@@ -240,7 +259,11 @@ interface ContextoTransaccional {
 }
 ```
 
-### Aplicación compartida · `unidad-de-trabajo.ts`
+</details>
+
+
+<details>
+<summary>Aplicación compartida · unidad-de-trabajo.ts</summary>
 
 ```ts
 interface UnidadDeTrabajo {
@@ -251,7 +274,11 @@ interface UnidadDeTrabajo {
 }
 ```
 
-### Aplicación · `confirmar-venta.ts`
+</details>
+
+
+<details>
+<summary>Aplicación · confirmar-venta.ts</summary>
 
 ```ts
 class ConfirmarVenta {
@@ -307,6 +334,9 @@ class ConfirmarVenta {
 }
 ```
 
+</details>
+
+
 ### Infraestructura · contratos de implementación
 
 | Archivo | Responsabilidad |
@@ -316,7 +346,8 @@ class ConfirmarVenta {
 | Adaptadores de Catálogo, Inventario y Caja | Cotizar con precios del servidor; descontar lotes aptos; guardar cobros y movimientos. |
 | Adaptador de Idempotencia | Clave única por negocio, usuario y operación; comparar la huella del comando completo. |
 
-### Presentación · `ventas.controller.ts`
+<details>
+<summary>Presentación · ventas.controller.ts</summary>
 
 Fragmento posterior a autenticación, autorización y validación de entrada.
 
@@ -336,7 +367,11 @@ class VentasController {
 }
 ```
 
-### Composición · `ventas.module.ts`
+</details>
+
+
+<details>
+<summary>Composición · ventas.module.ts</summary>
 
 ```ts
 function crearModuloVentas(uow: UnidadDeTrabajo) {
@@ -346,6 +381,9 @@ function crearModuloVentas(uow: UnidadDeTrabajo) {
   return { controller };
 }
 ```
+
+</details>
+
 
 | Punto de entrada | Responsabilidad |
 |---|---|

@@ -10,7 +10,7 @@ Organizar el backend para que las reglas de negocio permanezcan independientes d
 - **Enfoque:** Clean Architecture.
 - **Referencia:** Ventas; Adapter de imágenes en Catálogo.
 
-![SOLID aplicado a Ventas](../../../img/solid-ventas.svg)
+![SOLID aplicado a Ventas](../../../img/solid-ventas.png)
 
 ## Aplicación de SOLID
 
