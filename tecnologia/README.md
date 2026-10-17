@@ -42,14 +42,3 @@ No se añaden Redis/Upstash, PgBouncer ni réplica de lectura inicialmente. Se l
 ## Primera demostración funcional
 
 Dos negocios aislados; administrador crea empleado y turno; empleado abre caja, vende productos y cierra. Se prueban ventas simultáneas en distintas sucursales o negocios, con un responsable por sucursal; cada reintento conserva una sola venta y sus movimientos.
-
-## Fuentes oficiales
-
-- [Next.js: exportación estática](https://nextjs.org/docs/app/guides/static-exports).
-- [Express: middleware y rutas](https://expressjs.com/en/guide/using-middleware/).
-- [PostgreSQL: seguridad por filas](https://www.postgresql.org/docs/current/ddl-rowsecurity.html).
-- [PostgreSQL: bloqueos](https://www.postgresql.org/docs/current/explicit-locking.html).
-- [Render: respaldo y recuperación](https://render.com/docs/postgresql-backups).
-- [Cloudflare R2](https://developers.cloudflare.com/r2/).
-
-Los servicios están seleccionados para el diseño; no se han contratado ni desplegado. La Guía 01 utiliza Node.js/npm y Express; el proyecto mantiene ese entorno y justifica sus decisiones en los documentos de arquitectura.

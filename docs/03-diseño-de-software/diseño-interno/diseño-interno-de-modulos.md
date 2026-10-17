@@ -76,21 +76,12 @@ apps/api/src/shared/transacciones/
 
 ## 6. Código de referencia en TypeScript
 
-Ejemplo de confirmación de venta. Imports y adaptadores auxiliares omitidos; API transaccional de Prisma Client 7.
+Ejemplo acotado de Ventas: clases para el comportamiento, interfaces para los contratos y `type` para los datos. Se omiten imports, DTO HTTP y adaptadores auxiliares; no es una implementación completa. Infraestructura usa la API de Prisma Client 7.
 
-### Dominio · detalle-venta.ts
-
-```ts
-type DetalleVenta = Readonly<{
-  productoId: string;
-  cantidad: number;
-  precioCentimos: number;
-}>;
-```
-
-### Dominio · venta.ts
+### 6.1 Dominio · entidad y reglas
 
 ```ts
+// dominio/venta.ts
 class Venta {
   readonly detalles: readonly DetalleVenta[];
 
@@ -132,88 +123,66 @@ class Venta {
     );
   }
 }
-```
 
-### Aplicación · confirmar-venta.command.ts
-
-```ts
-type Item = Readonly<{
+// dominio/detalle-venta.ts: valor inmutable utilizado por Venta.
+type DetalleVenta = Readonly<{
   productoId: string;
   cantidad: number;
+  precioCentimos: number;
+}>;
+```
+
+### 6.2 Aplicación · contratos y datos
+
+Los puertos pertenecen a Aplicación y cada adaptador respeta el negocio y la sucursal del contexto autenticado.
+
+```ts
+// DTO de entrada y resultado; no contienen reglas de negocio.
+type Item = Readonly<{
+  productoId: string; cantidad: number;
 }>;
 
 type Cobro = Readonly<{
-  medio: 'EFECTIVO' | 'TARJETA' | 'BILLETERA';
-  aplicadoCentimos: number;
+  medio: 'EFECTIVO' | 'TARJETA' | 'BILLETERA'; aplicadoCentimos: number;
 }>;
 
 type Comando = Readonly<{
-  clave: string;
-  sesionCajaId: string;
-  items: readonly Item[];
-  cobros: readonly Cobro[];
+  clave: string; sesionCajaId: string; items: readonly Item[]; cobros: readonly Cobro[];
 }>;
 
 type Resultado = Readonly<{
-  ventaId: string;
-  totalCentimos: number;
+  ventaId: string; totalCentimos: number;
 }>;
-```
 
-### Aplicación · catalogo-consulta.ts
-
-```ts
 // catalogo-consulta.ts
 interface CatalogoConsulta {
   cotizar(items: readonly Item[]): Promise<readonly DetalleVenta[]>;
 }
-```
 
-### Aplicación · inventario-salida.ts
-
-```ts
 // inventario-salida.ts
 interface InventarioSalida {
   descontarLotesAptos(items: readonly Item[]): Promise<void>;
 }
-```
 
-### Aplicación · caja-cobros.ts
-
-```ts
 // caja-cobros.ts
 interface CajaCobros {
   bloquearYValidar(sesionId: string): Promise<void>;
   registrar(ventaId: string, cobros: readonly Cobro[]): Promise<void>;
 }
-```
 
-### Aplicación · venta-repository.ts
-
-```ts
 // venta-repository.ts
 interface VentaRepository {
   guardar(venta: Venta): Promise<string>;
 }
-```
 
-### Aplicación · idempotencia.ts
-
-```ts
 // idempotencia.ts
 interface Idempotencia {
   reclamar(cmd: Comando): Promise<Resultado | null>;
   completar(clave: string, resultado: Resultado): Promise<void>;
 }
-```
 
-### Aplicación compartida · contexto-transaccional.ts
-
-```ts
 type ContextoAutorizado = Readonly<{
-  tenantId: string;
-  sucursalId: string;
-  usuarioId: string;
+  tenantId: string; sucursalId: string; usuarioId: string;
 }>;
 
 interface ContextoTransaccional {
@@ -223,11 +192,7 @@ interface ContextoTransaccional {
   ventas: VentaRepository;
   idempotencia: Idempotencia;
 }
-```
 
-### Aplicación compartida · unidad-de-trabajo.ts
-
-```ts
 interface UnidadDeTrabajo {
   ejecutar<T>(
     ctx: ContextoAutorizado,
@@ -236,9 +201,10 @@ interface UnidadDeTrabajo {
 }
 ```
 
-### Aplicación · confirmar-venta.ts
+### 6.3 Aplicación · confirmar la venta
 
 ```ts
+// aplicacion/confirmar-venta.ts
 class ConfirmarVenta {
   constructor(private readonly uow: UnidadDeTrabajo) {}
 
@@ -292,7 +258,9 @@ class ConfirmarVenta {
 }
 ```
 
-### Infraestructura · unidad-de-trabajo-prisma.ts
+### 6.4 Infraestructura y composición
+
+**Unidad de trabajo:** todos los puertos reciben el mismo cliente transaccional.
 
 ```ts
 // shared/transacciones/unidad-de-trabajo-prisma.ts
@@ -325,7 +293,7 @@ class UnidadDeTrabajoPrisma implements UnidadDeTrabajo {
 }
 ```
 
-### Infraestructura · venta-repository-prisma.ts
+**Repositorio:** implementa el contrato; los campos corresponden al esquema previsto.
 
 ```ts
 // Ejemplo de mapeo; los nombres de campos corresponden al esquema previsto.
@@ -358,38 +326,10 @@ class VentaRepositoryPrisma implements VentaRepository {
 }
 ```
 
-### Presentación · ventas.controller.ts
+**Composición:** conecta los adaptadores con el caso de uso y el controlador mostrado en el diagrama. `VentasController` recibe el comando validado y el contexto autenticado; responde después de finalizar el caso de uso.
 
 ```ts
-class VentasController {
-  constructor(private readonly confirmarVenta: ConfirmarVenta) {}
-
-  confirmar = async (req: Request, res: Response): Promise<void> => {
-    const { comando, contextoAutorizado } = res.locals;
-    const resultado = await this.confirmarVenta.ejecutar(
-      comando,
-      contextoAutorizado
-    );
-
-    res.status(201).json(resultado);
-  };
-}
-```
-
-### Composición · ventas.module.ts
-
-```ts
-function crearModuloVentas(uow: UnidadDeTrabajo) {
-  const confirmarVenta = new ConfirmarVenta(uow);
-  const controller = new VentasController(confirmarVenta);
-
-  return { controller };
-}
-```
-
-### Composición · composition.ts
-
-```ts
+// composition.ts: ensamblaje; los adaptadores auxiliares se omiten.
 // Los adaptadores auxiliares pertenecen a sus módulos respectivos.
 function crearContexto(
   tx: Prisma.TransactionClient,
@@ -408,26 +348,13 @@ function componerVentas(prisma: PrismaClient) {
   const uow = new UnidadDeTrabajoPrisma(prisma, crearContexto);
   return crearModuloVentas(uow);
 }
-```
 
-### Presentación · ventas.routes.ts
+// ventas.module.ts
+function crearModuloVentas(uow: UnidadDeTrabajo) {
+  const confirmarVenta = new ConfirmarVenta(uow);
+  const controller = new VentasController(confirmarVenta);
 
-```ts
-// Middlewares definidos por Acceso y la validación de entrada.
-function crearRutasVentas(controller: VentasController) {
-  const router = Router();
-
-  router.post(
-    '/',
-    autenticarSesion,
-    autorizarVentaEnSucursal,
-    validarComandoVenta,
-    (req, res, next) => {
-      controller.confirmar(req, res).catch(next);
-    }
-  );
-
-  return router;
+  return { controller };
 }
-// app.use('/api/v1/ventas', crearRutasVentas(modulo.controller));
 ```
+
