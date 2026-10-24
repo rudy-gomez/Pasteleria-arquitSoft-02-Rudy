@@ -22,8 +22,8 @@ Se fijarán versiones compatibles y con soporte en `package.json`, archivo de bl
 
 | Servicio | Uso | Condición operativa |
 |---|---|---|
-| **Render Web Service** | Una instancia Node.js ejecuta Express y sirve la exportación estática de Next.js. | HTTPS, secretos en entorno, comprobación de salud y logs estructurados. |
-| **Render Postgres** | Datos de negocio y sesiones. | Plan con recuperación a un punto en el tiempo (PITR), red protegida, rol de aplicación limitado y migraciones separadas. |
+| **Azure App Service (Linux, Node.js)** | Una instancia Node.js ejecuta Express y sirve la exportación estática de Next.js. | HTTPS, secretos en la configuración de la aplicación, comprobación de salud en `/health` y logs estructurados. |
+| **Azure Database for PostgreSQL (servidor flexible)** | Datos de negocio y sesiones. | Copias automáticas con recuperación a un punto en el tiempo (PITR, retención de 7 a 35 días), red protegida, rol de aplicación limitado y migraciones separadas. |
 | **Cloudflare R2** | Fotografías privadas de productos. | Claves y metadatos por negocio; acceso autorizado desde la API. |
 | **UptimeRobot** | Monitoreo externo de disponibilidad. | Consulta `/health` cada minuto, avisa caídas y calcula el porcentaje mensual de disponibilidad (AC02). |
 

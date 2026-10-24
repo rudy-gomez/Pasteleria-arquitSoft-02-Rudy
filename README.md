@@ -44,7 +44,7 @@ En una pastelería, la operación diaria incluye recibir productos, vender, cont
 | API REST | Node.js, Express y TypeScript. |
 | Persistencia | PostgreSQL y Prisma. |
 | Fotografías | Cloudflare R2. |
-| Despliegue previsto | Render Web Service y Render Postgres. |
+| Despliegue previsto | Azure App Service y Azure Database for PostgreSQL. |
 
 ![Arquitectura del sistema](img/arquitectura-inicial.png)
 

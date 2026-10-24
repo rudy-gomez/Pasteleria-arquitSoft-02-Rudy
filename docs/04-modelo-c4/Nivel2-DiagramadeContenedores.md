@@ -54,7 +54,7 @@ Sistema externo relacionado:
 
 - Next.js: exportación estática; Express sirve interfaz y API bajo el mismo origen.
 - Datos privados: consultas en ejecución a `/api/v1`.
-- Despliegue previsto: Render y PostgreSQL administrado; fotografías en R2.
+- Despliegue previsto: Azure App Service y Azure Database for PostgreSQL; fotografías en R2.
 - Sesiones en base de datos; archivos en R2; copias y restauración antes del piloto.
 
 ## 6. Seguridad entre contenedores

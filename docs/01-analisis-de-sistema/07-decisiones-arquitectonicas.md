@@ -15,4 +15,4 @@
 | ID | Decisión arquitectónica | Driver relacionado | Justificación | Resultado |
 |---|---|---|---|---|
 | ADR-008 | Cloudflare R2 para imágenes | DA01, DA02; RF04 | Almacenar fotos fuera de la instancia de aplicación mediante un adaptador. | Un sistema externo con credenciales en servidor y metadatos por negocio en PostgreSQL. |
-| ADR-009 | Render para aplicación y PostgreSQL administrado | DA05 | Reducir la administración inicial del alojamiento y definir respaldo y recuperación. | Selección de diseño; plan, región y presupuesto pendientes, sin contratación ni despliegue realizados. |
+| ADR-009 | Azure para aplicación y PostgreSQL administrado | DA05 | Reducir la administración del alojamiento con App Service y PostgreSQL administrado en un mismo proveedor, con copias automáticas y recuperación a un punto en el tiempo. | Selección de diseño; plan, región y presupuesto pendientes, sin contratación ni despliegue realizados. |
