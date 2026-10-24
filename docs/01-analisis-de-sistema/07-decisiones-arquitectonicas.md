@@ -1,3 +1,5 @@
+# Decisiones arquitectónicas
+
 | ID | Decisión arquitectónica | Driver relacionado | Justificación | Resultado |
 |---|---|---|---|---|
 | ADR-001 | Monolito modular | DA01 – Escalabilidad; DA06 – Mantenibilidad | Separar responsabilidades dentro de un backend desplegable como unidad. | Módulos de Plataforma, Acceso, Catálogo, Inventario, Ventas, Caja y Reportes. |

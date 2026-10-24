@@ -4,6 +4,17 @@
 
 Sistema web para administrar una pastelería o una cadena de sucursales, con información separada por negocio.
 
+## Problemática
+
+En una pastelería, la operación diaria incluye recibir productos, vender, controlar existencias y administrar el efectivo de caja. Cuando estos registros se llevan en cuadernos, hojas de cálculo o de forma separada:
+
+- El dueño no puede saber con certeza cuánto se vendió, cuánto se recaudó y cuánto se retiró en un periodo y sucursal.
+- Una venta puede registrarse sin descontar el stock o sin reflejarse en caja, y luego es difícil explicar la diferencia.
+- Las mermas, los vencimientos y los traslados entre sucursales no quedan registrados con responsable y motivo.
+- No se identifica qué empleado realizó cada operación ni en qué turno.
+
+**Propuesta:** una plataforma SaaS que centraliza y automatiza la gestión interna (personal, catálogo, inventario, ventas, caja y reportes) para uno o varios negocios, manteniendo separada la información de cada uno.
+
 ## Alcance
 
 - Personal, permisos y turnos de trabajo.
