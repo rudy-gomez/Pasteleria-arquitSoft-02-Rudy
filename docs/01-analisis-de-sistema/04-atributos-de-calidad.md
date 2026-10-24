@@ -21,5 +21,3 @@
 | AC05 | Mantenibilidad | Dominio sin imports de Express o Prisma; pruebas de regresión aprobadas. | Revisión de imports del dominio y ejecución de pruebas tras cambiar una regla. | Vitest | [EQ-05](08-escenarios-atributos-calidad.md#eq-05-mantenibilidad-cambio-de-reglas) |
 | AC06 | Integridad y concurrencia | Una venta, un descuento y un cobro por operación; sin duplicados ni registros parciales. | Ventas simultáneas y reintento de la misma confirmación sobre PostgreSQL real. | Vitest, Supertest y PostgreSQL en Docker Compose | [EQ-06](08-escenarios-atributos-calidad.md#eq-06-integridad-ventas-entre-sucursales-y-reintento) |
 | AC07 | Trazabilidad | 100% de operaciones de prueba reconstruidas. | Registrar merma, anulación y entrega de efectivo, y verificar responsable, fecha, motivo y referencia. | Vitest y Supertest | [EQ-07](08-escenarios-atributos-calidad.md#eq-07-trazabilidad-inventario-y-efectivo) |
-
-Las metas son objetivos de diseño. Se verificarán cuando exista la implementación; todavía no hay resultados medidos.
