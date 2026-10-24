@@ -25,6 +25,7 @@ Se fijarán versiones compatibles y con soporte en `package.json`, archivo de bl
 | **Render Web Service** | Una instancia Node.js ejecuta Express y sirve la exportación estática de Next.js. | HTTPS, secretos en entorno, comprobación de salud y logs estructurados. |
 | **Render Postgres** | Datos de negocio y sesiones. | Plan con recuperación a un punto en el tiempo (PITR), red protegida, rol de aplicación limitado y migraciones separadas. |
 | **Cloudflare R2** | Fotografías privadas de productos. | Claves y metadatos por negocio; acceso autorizado desde la API. |
+| **UptimeRobot** | Monitoreo externo de disponibilidad. | Consulta `/health` cada minuto, avisa caídas y calcula el porcentaje mensual de disponibilidad (AC02). |
 
 Next.js utilizará `output: "export"`. Las pantallas se generan sin datos privados; en el navegador consultan `/api/v1`. Se emplean rutas estáticas y parámetros para seleccionar registros. No se requieren Server Actions, SSR ni un servidor Next.js adicional. Las fotografías se sirven mediante la API autorizada y un elemento de imagen estándar, sin depender del optimizador de imágenes de un servidor Next.js.
 
