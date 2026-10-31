@@ -13,4 +13,4 @@ La plataforma adopta un **monolito modular por capas**. El backend tiene una ún
 - **Datos:** los adaptadores Prisma y SQL parametrizado acceden a PostgreSQL, donde se conservan los registros transaccionales y las sesiones.
 - **Sistema externo:** Cloudflare R2 almacena fotografías mediante el adaptador de Catálogo.
 
-La venta, el cobro y el descuento de stock comparten una transacción. El negocio es el tenant; sus sucursales no son tenants separados. La interfaz compilada se sirve junto a la API bajo el mismo origen; no se duplican reglas de negocio en Next.js.
+La venta, el cobro y el descuento de stock comparten una transacción. El negocio es el tenant; sus sucursales no son tenants separados. La interfaz se despliega por separado y consume la API mediante HTTPS/JSON; no se duplican reglas de negocio en Next.js.

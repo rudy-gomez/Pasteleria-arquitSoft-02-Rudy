@@ -23,7 +23,7 @@ Mostrar las aplicaciones y almacenes de datos de la plataforma.
 
 | Contenedor | Tecnología | Responsabilidad | Datos que maneja |
 |---|---|---|---|
-| **Aplicación web** | Next.js, TypeScript y Tailwind CSS | Interfaz de atención y administración en navegador. | Estado temporal de pantalla y carrito. |
+| **Aplicación web (PWA)** | Next.js, TypeScript y Tailwind CSS | Interfaz de escritorio y aplicación instalable para celular. | Estado temporal de pantalla y carrito. |
 | **API Pastelerías** | Express y TypeScript | Autorizar solicitudes y coordinar casos de uso. | Opera sobre la base mediante adaptadores Prisma. |
 | **Base de datos** | PostgreSQL | Persistencia, transacciones y políticas de aislamiento. | Negocios, usuarios, turnos de trabajo, productos, stock, ventas, sesiones de caja y sesiones de acceso. |
 
@@ -52,9 +52,9 @@ Sistema externo relacionado:
 | Sin caché ni réplica inicial | Redis y réplica obligatorios | Medir consultas e índices antes de añadir componentes. |
 | Una instancia y base administrada | Infraestructura redundante inicial | Propuesta de piloto ajustable a presupuesto; no constituye alta disponibilidad. |
 
-- Next.js: exportación estática; Express sirve interfaz y API bajo el mismo origen.
+- Next.js: exportación estática publicada en `app.sweetly.pe`; la API se publica en `api.sweetly.pe`.
 - Datos privados: consultas en ejecución a `/api/v1`.
-- Despliegue previsto: Azure App Service y Azure Database for PostgreSQL; fotografías en R2.
+- Despliegue previsto: Azure Static Web Apps (interfaz), Azure Container Apps (API) y Azure Database for PostgreSQL; fotografías en R2.
 - Sesiones en base de datos; archivos en R2; copias y restauración antes del piloto.
 
 ## 6. Seguridad entre contenedores

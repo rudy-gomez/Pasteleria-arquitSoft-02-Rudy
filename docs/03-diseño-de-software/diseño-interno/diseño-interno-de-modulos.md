@@ -10,12 +10,12 @@
 
 ## 2. Estructura de carpetas
 
-**Un solo proyecto:** `tecnologia/pasteleria-saas/` contiene `apps/web/` (interfaz), `apps/api/` (backend) y `database/` (Prisma y migraciones).
+**Un solo proyecto:** `Sweetly` (repositorio de código aparte) contiene `frontend/` (interfaz web y PWA) y `backend/` (API REST, Prisma y migraciones).
 
 **Detalle del módulo Ventas dentro de ese backend:**
 
 ```text
-apps/api/src/modules/ventas/
+backend/src/modules/ventas/
 ├── dominio/
 │   ├── venta.ts
 │   └── detalle-venta.ts
@@ -33,7 +33,7 @@ apps/api/src/modules/ventas/
 ├── ventas.module.ts
 └── index.ts
 
-apps/api/src/shared/transacciones/
+backend/src/shared/transacciones/
 ├── unidad-de-trabajo.ts             Contrato del núcleo de aplicación
 ├── contexto-transaccional.ts        Agrupa puertos pequeños, no métodos globales
 └── unidad-de-trabajo-prisma.ts      Adaptador que conecta a todos al mismo tx
