@@ -1,8 +1,8 @@
-# Plataforma SaaS de gestión de pastelerías
+# Sweetly · Gestión inteligente para pastelerías
 
 **Autor:** Rudy Gomez Bellido · **Curso:** Arquitectura de Software
 
-Sistema web para administrar una pastelería o una cadena de sucursales, con información separada por negocio.
+Plataforma SaaS, web y móvil (PWA), para administrar una pastelería o una cadena de sucursales, con información separada por negocio.
 
 ## Problemática
 
@@ -40,11 +40,12 @@ En una pastelería, la operación diaria incluye recibir productos, vender, cont
 |---|---|
 | Estilo | Monolito modular por capas. |
 | Enfoque interno | Clean Architecture en el backend. |
-| Interfaz web | Next.js, TypeScript y Tailwind CSS. |
+| Interfaz | Next.js, TypeScript y Tailwind CSS; vista de escritorio y PWA para celular. |
 | API REST | Node.js, Express y TypeScript. |
 | Persistencia | PostgreSQL y Prisma. |
 | Fotografías | Cloudflare R2. |
-| Despliegue previsto | Azure App Service y Azure Database for PostgreSQL. |
+| Despliegue previsto | Azure Static Web Apps (interfaz), Azure Container Apps (API) y Azure Database for PostgreSQL. |
+| Metodología | Spec-Driven Development (SDD): especificación → plan → tareas → código. |
 
 ![Arquitectura del sistema](img/arquitectura-inicial.png)
 
@@ -60,6 +61,28 @@ En una pastelería, la operación diaria incluye recibir productos, vender, cont
 | Caja | Apertura, cierre y entregas de efectivo | RF08, RF11–RF12 |
 | Reportes | Consultas, historial y Excel | RF13, RF17 |
 
+## Estructura del repositorio
+
+```text
+Pasteleria-arquitSoft-02-Rudy/
+├── docs/                    Análisis, arquitectura, diseño y modelo C4
+├── img/                     Diagramas
+└── tecnologia/
+    └── README.md            Tecnologías, diseño de interfaz y despliegue
+```
+
+## Despliegue
+
+| Parte | Servicio | Dirección prevista |
+|---|---|---|
+| Interfaz web y PWA | Azure Static Web Apps | `app.sweetly.pe` |
+| API REST | Azure Container Apps (Docker) | `api.sweetly.pe` |
+| Base de datos | Azure Database for PostgreSQL (flexible) | Red privada |
+| Fotografías | Cloudflare R2 | Acceso autorizado desde la API |
+| Monitoreo | UptimeRobot sobre `/health` | — |
+
+Detalle técnico y ejecución local en [tecnologia/README.md](tecnologia/README.md).
+
 ## Documentación
 
 | Sección | Contenido |
@@ -70,7 +93,7 @@ En una pastelería, la operación diaria incluye recibir productos, vender, cont
 | [Patrones](docs/03-diseño-de-software/diseño-interno/patrones-de-diseño.md) | Repository, Unit of Work y Adapter. |
 | [SOLID](docs/03-diseño-de-software/diseño-interno/principios-de-diseño.md) | Aplicación de los cinco principios. |
 | [Modelo C4](docs/04-modelo-c4/Nivel1-DiagramadeContextodelSistema.md) | Contexto, contenedores, componentes y código. |
-| [Tecnologías](tecnologia/README.md) | Selección técnica y organización de implementación. |
+| [Tecnologías](tecnologia/README.md) | Selección técnica, diseño de interfaz, ejecución y despliegue. |
 
 ## Reglas centrales
 
@@ -79,4 +102,4 @@ En una pastelería, la operación diaria incluye recibir productos, vender, cont
 - Repetir una confirmación no duplica la venta.
 - Se requiere conexión para confirmar operaciones.
 
-**Estado:** diseño arquitectónico y ejemplos de referencia; implementación y pruebas operativas pendientes.
+**Estado (Sprint 01):** Plataforma, Acceso, Catálogo e Inventario se implementan en un proyecto de código aparte (`Sweetly`); Ventas, Caja y Reportes en los siguientes sprints.
